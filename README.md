@@ -13,7 +13,7 @@ composer require kylin987/think-orm-redis-cache
 ```
 ### 2、配置：
 ```
-//修改config/database.php，添加以下3个配置
+1、修改config/database.php，添加以下3个配置
 
 //数据库缓存store
     'cache_store'       => 'ormCache',
@@ -22,7 +22,8 @@ composer require kylin987/think-orm-redis-cache
     //空数据是否仍然缓存
     'cache_always' => true,
 
-//修改config/cache.php，增加一个缓存store，名字ormCache和上面的配置保持一致，下面的配置根据需求自行配置
+2、修改config/cache.php，增加一个缓存store，名字ormCache和上面的配置保持一致，下面的配置根据需求自行配置
+
 // ormredis缓存
 'ormCache'  =>  [
     // 驱动方式
