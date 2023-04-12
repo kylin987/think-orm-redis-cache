@@ -1,5 +1,5 @@
 # 基于thinkphp6的跨项目共享数据缓存的composer包
-此包仅适用于thinkphp6框架使用，同时提供适用于webman的包[点这里](http://www.baidu.com)
+此包仅适用于thinkphp6框架使用，同时提供适用于webman的包[点这里](https://github.com/kylin987/webman-thinkorm-redis-cache)
 
 ## 安装
 ```
