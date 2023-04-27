@@ -10,7 +10,7 @@ trait ThinkOrmCache
     public static $cacheExpTime = 172800;   //2天
 
     //获取主键缓存
-    public static function getCache($id, $getDb = false)
+    public static function getRedisCache($id, $getDb = false)
     {
         list($key, $pk) = self::getCacheKey(self::getModel(), $id);
         if ($getDb) {
