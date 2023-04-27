@@ -42,11 +42,11 @@ composer require kylin987/think-orm-redis-cache
 ```
 //获取数据
 $id = 10;
-$user = User::getCache($id);
+$user = User::getRedisCache($id);
 
 //更新数据
 //正常使用模型更新数据即可，也可以手动清理缓存触发后续的更新缓存
 $id = 10;
-$user = User::getCache($id);
+$user = User::getRedisCache($id);
 User::delCache($user);
 ```
