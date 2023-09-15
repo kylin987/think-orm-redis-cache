@@ -7,16 +7,14 @@ use think\facade\Cache;
 
 trait ThinkOrmCache
 {
-    public static $cacheExpTime = 172800;   //2天
-
     //获取主键缓存
-    public static function getRedisCache($id, $getDb = false)
+    public static function getRedisCache($id, int $cacheExpTime = 0, $getDb = false)
     {
         list($key, $pk) = self::getCacheKey(self::getModel(), $id);
         if ($getDb) {
             self::delKey($key);
         }
-        $cacheExpTime = config('database.cache_exptime') ?? self::$cacheExpTime;
+        $cacheExpTime = $cacheExpTime == 0 ?  config('thinkorm.cache_exptime') : $cacheExpTime;
         $always = config('database.cache_always') ?? true;
         $res = self::cache($key, $cacheExpTime, null, $always)->where($pk, '=', $id)->find();
         return $res;
