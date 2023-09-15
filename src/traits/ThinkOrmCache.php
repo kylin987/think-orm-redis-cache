@@ -8,13 +8,12 @@ use think\facade\Cache;
 trait ThinkOrmCache
 {
     //获取主键缓存
-    public static function getRedisCache($id, int $cacheExpTime = 0, $getDb = false)
+    public static function getRedisCache($id, $getDb = false)
     {
-        list($key, $pk) = self::getCacheKey(self::getModel(), $id);
+        list($key, $pk, $cacheExpTime) = self::getCacheKey(self::getModel(), $id);
         if ($getDb) {
             self::delKey($key);
         }
-        $cacheExpTime = $cacheExpTime == 0 ?  config('thinkorm.cache_exptime') : $cacheExpTime;
         $always = config('database.cache_always') ?? true;
         $res = self::cache($key, $cacheExpTime, null, $always)->where($pk, '=', $id)->find();
         return $res;
@@ -37,6 +36,7 @@ trait ThinkOrmCache
     private static function getCacheKey($model, $id = null)
     {
         $pk = $model->cachePk ?? 'id';
-        return ['orm_' . $model->getTable() . '_' . (is_null($id) ? $model->$pk : $id), $pk];
+        $cacheExpTime = $model->cacheExpTime ?? config('thinkorm.cache_exptime');
+        return ['orm_' . $model->getTable() . '_' . (is_null($id) ? $model->$pk : $id), $pk, $cacheExpTime];
     }
 }
