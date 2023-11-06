@@ -15,6 +15,25 @@ trait ThinkOrmCache
             self::delKey($key);
         }
         $always = config('database.cache_always') ?? true;
+        return self::cache($key, $cacheExpTime, null, $always)->where($pk, '=', $id)->find();
+    }
+
+    /**
+     * @param $id
+     * @param $option ['cachePk' => '自定义主键']
+     * @param $getDb
+     * @return array|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public static function getRedisCacheOption($id, $option = [], $getDb = false)
+    {
+        list($key, $pk, $cacheExpTime) = self::getCacheKey(self::getModel(), $id, $option);
+        if ($getDb) {
+            self::delKey($key);
+        }
+        $always = config('database.cache_always') ?? true;
         $res = self::cache($key, $cacheExpTime, null, $always)->where($pk, '=', $id)->find();
         return $res;
     }
@@ -33,10 +52,13 @@ trait ThinkOrmCache
     }
 
     //获取redis键和主pk
-    private static function getCacheKey($model, $id = null)
+    private static function getCacheKey($model, $id = null, $option = [])
     {
         $pk = $model->cachePk ?? 'id';
+        if (isset($option['cachePk']) && !empty($option['cachePk'])) {
+            $pk = $option['cachePk'];
+        }
         $cacheExpTime = $model->cacheExpTime ?? config('thinkorm.cache_exptime');
-        return ['orm_' . $model->getTable() . '_' . (is_null($id) ? $model->$pk : $id), $pk, $cacheExpTime];
+        return ['orm_' . $model->getTable() . '_' . $pk . '_' . (is_null($id) ? $model->$pk : $id), $pk, $cacheExpTime];
     }
 }
