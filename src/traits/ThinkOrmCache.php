@@ -39,9 +39,9 @@ trait ThinkOrmCache
     }
 
     //删除缓存
-    public static function delCache($model)
+    public static function delCache($model, $option = [])
     {
-        list($key) = self::getCacheKey($model);
+        list($key) = self::getCacheKey($model, null, $option);
         return self::delKey($key);
     }
     
