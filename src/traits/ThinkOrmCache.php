@@ -34,8 +34,7 @@ trait ThinkOrmCache
             self::delKey($key);
         }
         $always = config('database.cache_always') ?? true;
-        $res = self::cache($key, $cacheExpTime, null, $always)->where($pk, '=', $id)->find();
-        return $res;
+        return self::cache($key, $cacheExpTime, null, $always)->where($pk, '=', $id)->find();
     }
 
     //删除缓存
@@ -59,6 +58,9 @@ trait ThinkOrmCache
             $pk = $option['cachePk'];
         }
         $cacheExpTime = $model->cacheExpTime ?? config('thinkorm.cache_exptime');
+        if (isset($option['cacheExpTime']) && !empty($option['cacheExpTime'])) {
+            $cacheExpTime = $option['cacheExpTime'];
+        }
         return ['orm_' . $model->getTable() . '_' . $pk . '_' . (is_null($id) ? $model->$pk : $id), $pk, $cacheExpTime];
     }
 }
