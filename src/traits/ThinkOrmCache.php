@@ -21,50 +21,6 @@ trait ThinkOrmCache
         return self::cache($key, $cacheExpTime)->where($pk, '=', $id)->find();
     }
 
-    /**
-     * @param $id
-     * @param array $option ['cachePk' => '自定义主键']
-     * @param $getDb
-     * @return array|mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public static function getRedisCacheOption($id, array $option = [], $getDb = false)
-    {
-        list($key, $pk, $cacheExpTime) = self::getCacheKey(self::getModel(), $id, $option);
-        if ($getDb) {
-            self::delKey($key);
-        }
-        $always = config('database.cache_always') ?? false;
-        if ($always){
-            return self::cacheAlways($key, $cacheExpTime)->where($pk, '=', $id)->find();
-        }
-        return self::cache($key, $cacheExpTime)->where($pk, '=', $id)->find();
-    }
-
-    /**
-     * @param $where array // 查询条件
-     * @param $orderBy string // 排序
-     * @param bool $getDb
-     * @return array|mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public static function getRedisCacheByWhere(array $where, string $orderBy = 'id ASC', bool $getDb = false)
-    {
-        list($key, $pk, $cacheExpTime) = self::getCacheKey(self::getModel(), null, ['where' => $where, 'orderBy' => $orderBy]);
-        if ($getDb) {
-            self::delKey($key);
-        }
-        $always = config('database.cache_always') ?? false;
-        if ($always){
-            return self::cacheAlways($key, $cacheExpTime)->where($where)->order($orderBy)->find();
-        }
-        return self::cache($key, $cacheExpTime)->where($where)->order($orderBy)->find();
-    }
-
     //删除缓存
     public static function delCache($model, $option = [])
     {
